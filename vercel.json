@@ -1,8 +1,6 @@
 {
     "version":2,
-    "enc":{
-        "MONGO_URI":"minist"
-    },
+
     "builds":[
         {
             "src":"./src/main.ts",
