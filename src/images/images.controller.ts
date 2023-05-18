@@ -1,9 +1,7 @@
-import { BadRequestException, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { BadRequestException, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Res } from '@nestjs/common';
 import { ImagesService } from './images.service';
 import { Images } from './interfaces/images.interface';
-import { Response, Express } from 'express';
+import { Response} from 'express';
 
 
 @Controller('images')
@@ -26,41 +24,41 @@ export class ImagesController {
         message:'Image Delete Succesfully', deleteImage});
     }
  
-    @Post('upload')
-    @UseInterceptors(FileInterceptor('file', {
-        storage: diskStorage({
-            destination:'./upload',
-            filename:(req: any, file: any, cb: any)=>{
-                const name = file.originalname.split('.')[0];
-                const fileExtension = file.originalname.split('.')[1];
-                const newFileName = name.split('').join('_')+ '_'+Date.now()+ '.'+ fileExtension;
+    // @Post('upload')
+    // @UseInterceptors(FileInterceptor('file', {
+    //     storage: diskStorage({
+    //         destination:'./upload',
+    //         filename:(req: any, file: any, cb: any)=>{
+    //             const name = file.originalname.split('.')[0];
+    //             const fileExtension = file.originalname.split('.')[1];
+    //             const newFileName = name.split('').join('_')+ '_'+Date.now()+ '.'+ fileExtension;
 
-                cb(null, newFileName);
+    //             cb(null, newFileName);
 
-            }
-        }),
-        fileFilter: (req:any, file:any, cb:any)=>{
-            if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)){
-                return cb(null, false)
-            }
-            cb(null, true)
-        }
-    }))
+    //         }
+    //     }),
+    //     fileFilter: (req:any, file:any, cb:any)=>{
+    //         if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)){
+    //             return cb(null, false)
+    //         }
+    //         cb(null, true)
+    //     }
+    // }))
 
-    async uploadFile(@UploadedFile()file:Express.Multer.File){
-        console.log(file)
-        if(!file){
-            throw new BadRequestException('file is not an image', { cause: new Error(), description: 'Some error description' })
-        } else{
-            const response = {
-                file: `http://localhost:3000/api/v1/images/${file.filename}`
+    // async uploadFile(@UploadedFile()file:Express.Multer.File){
+    //     console.log(file)
+    //     if(!file){
+    //         throw new BadRequestException('file is not an image', { cause: new Error(), description: 'Some error description' })
+    //     } else{
+    //         const response = {
+    //             file: `http://localhost:3000/api/v1/images/${file.filename}`
                 
-            } 
+    //         } 
             
-            return await this.imagesService.uploadFile({filename:response.file})
-        }
+    //         return await this.imagesService.uploadFile({filename:response.file})
+    //     }
 
-    }
+    // }
     
     @Get('/:filename')
     async getPicture(@Param('filename')filename, @Res()res:Response){
