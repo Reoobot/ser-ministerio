@@ -12,10 +12,10 @@
             "src":"/(.*)",
             "dest":"/src/",
             "methods":[
-                "GET",
+                "GET", 
+                "DELETE",
                 "POST",
-                "PUT",
-                "DELETE"
+                "PUT"
             ]
            
         }
